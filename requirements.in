@@ -23,7 +23,7 @@ pre-commit==4.6.2
 
 # Testing
 molecule==26.6.0
-molecule-plugins[podman]==26.7.8
+molecule-plugins[podman]==26.7.15
 
 # Additional collections support
 jmespath==1.1.0
