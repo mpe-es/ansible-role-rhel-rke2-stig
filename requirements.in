@@ -12,7 +12,7 @@
 # (see .github/dependabot.yml).
 
 # Core Ansible
-ansible-core==2.21.3
+ansible-core==2.21.4
 
 # Linting (pinned for local/CI parity)
 yamllint==1.38.0
