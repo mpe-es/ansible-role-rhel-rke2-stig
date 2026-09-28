@@ -63,7 +63,7 @@ jobs:
         # contents: read); without nofilter, the local reporter needs a diff and
         # fails with "diff command is empty". fail_level: any fails on any
         # finding, including the shellcheck SC* info/style codes.
-        uses: reviewdog/action-actionlint@d290e336d5a743810aef4404f757dc862276d2ae # v1.73.4
+        uses: reviewdog/action-actionlint@2085657ab2c7f48c58edcc767fba576f63bea76b # v1.77.0
         with:
           reporter: local
           filter_mode: nofilter
