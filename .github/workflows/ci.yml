@@ -63,7 +63,7 @@ jobs:
         # contents: read); without nofilter, the local reporter needs a diff and
         # fails with "diff command is empty". fail_level: any fails on any
         # finding, including the shellcheck SC* info/style codes.
-        uses: reviewdog/action-actionlint@d290e336d5a743810aef4404f757dc862276d2ae # v1.73.4
+        uses: reviewdog/action-actionlint@2085657ab2c7f48c58edcc767fba576f63bea76b # v1.77.0
         with:
           reporter: local
           filter_mode: nofilter
@@ -157,14 +157,14 @@ jobs:
       - name: Test Podman container creation
         run: |
           # Pull and test Rocky Linux 9 (same image Molecule uses below)
-          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:97651f6fcac61132e22bdd164599624da80c55be9fce9ab7f2ae0e11620e427b
+          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:c10a398e6919c7d182fc4048c1c34d2462204f6366f42492e793ae9490207ff4
           # Test basic container creation with systemd
           podman run --rm -d --name test-systemd \
             --privileged \
             --cgroupns=host \
             --tmpfs /run --tmpfs /tmp \
             --cap-add SYS_ADMIN --cap-add AUDIT_WRITE --cap-add AUDIT_CONTROL \
-            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:97651f6fcac61132e22bdd164599624da80c55be9fce9ab7f2ae0e11620e427b /usr/sbin/init
+            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:c10a398e6919c7d182fc4048c1c34d2462204f6366f42492e793ae9490207ff4 /usr/sbin/init
           sleep 5
           podman exec test-systemd systemctl status || true
           podman stop test-systemd || true
