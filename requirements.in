@@ -22,8 +22,8 @@ ansible-lint==26.9.0
 pre-commit==4.6.2
 
 # Testing
-molecule==26.6.0
-molecule-plugins[podman]==26.7.8
+molecule==26.9.0
+molecule-plugins[podman]==26.9.28
 
 # Additional collections support
 jmespath==1.1.0

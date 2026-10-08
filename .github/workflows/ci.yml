@@ -158,16 +158,23 @@ jobs:
         run: |
           # Pull and test Rocky Linux 9 (same image Molecule uses below)
           podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:c10a398e6919c7d182fc4048c1c34d2462204f6366f42492e793ae9490207ff4
-          # Test basic container creation with systemd
+          # Mirrors the molecule/default platform config
+          trap 'timeout -k 5 30 podman rm -f test-systemd >/dev/null 2>&1 || true' EXIT
           podman run --rm -d --name test-systemd \
             --privileged \
-            --cgroupns=host \
-            --tmpfs /run --tmpfs /tmp \
+            --systemd=always \
             --cap-add SYS_ADMIN --cap-add AUDIT_WRITE --cap-add AUDIT_CONTROL \
             quay.io/rockylinux/rockylinux:9-ubi-init@sha256:c10a398e6919c7d182fc4048c1c34d2462204f6366f42492e793ae9490207ff4 /usr/sbin/init
-          sleep 5
-          podman exec test-systemd systemctl status || true
-          podman stop test-systemd || true
+          state=""
+          for _ in $(seq 30); do
+            state=$(timeout -k 5 10 podman exec test-systemd systemctl is-system-running 2>/dev/null || true)
+            if [[ "${state}" == "running" || "${state}" == "degraded" ]]; then
+              break
+            fi
+            sleep 2
+          done
+          echo "systemd state: ${state:-<no response>}"
+          [[ "${state}" == "running" || "${state}" == "degraded" ]]
 
       - name: Run Molecule tests
         run: molecule test --scenario-name ${{ matrix.scenario }}

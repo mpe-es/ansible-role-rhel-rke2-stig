@@ -3,14 +3,14 @@
 # Filename: molecule/default/molecule.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Molecule test configuration for RHEL 9 STIG compliance testing
-# Last Updated: 23 Jan 2026
+# Last Updated: 08 Oct 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 dependency:
   name: galaxy
   options:
-    requirements-file: requirements.yml
-    role-file: requirements.yml
+    requirements-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
+    role-file: "${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml"
 
 driver:
   name: podman
@@ -27,14 +27,9 @@ platforms:
     pre_build_image: true
     privileged: true
     command: /usr/sbin/init
-    # NOTE: do not add a cgroupns/cgroupns_mode key here. It is not a supported
-    # molecule podman-driver option and is never forwarded to podman, so it is
-    # silently ignored (and rejected outright by the driver schema added in
-    # molecule-plugins 26.7.15). systemd-as-PID-1 works on the GitHub Actions
-    # runners via privileged + the /run tmpfs + SYS_ADMIN below.
-    tmpfs:
-      /run: rw,noexec,nosuid,size=65536k
-      /tmp: rw,noexec,nosuid
+    # Podman systemd mode mounts /run and /tmp. Do not add `tmpfs:`: molecule's
+    # schema requires a list, podman_container a dict.
+    systemd: "always"
     capabilities:
       - SYS_ADMIN
       - AUDIT_WRITE
