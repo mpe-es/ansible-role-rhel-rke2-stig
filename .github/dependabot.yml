@@ -3,7 +3,7 @@
 # Filename: .github/dependabot.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Dependabot configuration for automated dependency updates
-# Last Updated: 13 Jul 2026
+# Last Updated: 08 Oct 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 version: 2
@@ -43,14 +43,9 @@ updates:
 
   # Python dependencies (pip), managed as a pip-compile lock:
   # requirements.in is the source; requirements.txt is the hash-pinned,
-  # --require-hashes lock generated from it. The option below lets the
-  # Dependabot updater run `pip-compile` to regenerate requirements.txt so
-  # the source and lock stay in sync. NOTE: this permission applies ONLY to
-  # GitHub's isolated Dependabot updater computing dependency PRs. It has no
-  # effect on CI execution, the runtime role, or the deployed system.
+  # --require-hashes lock generated from it.
   - package-ecosystem: "pip"
     directory: "/"
-    insecure-external-code-execution: allow
     schedule:
       interval: "weekly"
       day: "monday"
