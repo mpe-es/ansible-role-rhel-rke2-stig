@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bumped molecule to 26.9.0 and molecule-plugins[podman] to 26.9.28. Both now
+  validate `platforms[].tmpfs` as a list, while `containers.podman.podman_container`
+  requires a dict, so the Molecule platform drops its `tmpfs:` mounts and pins
+  podman systemd mode (`systemd: "always"`), which mounts `/run` and `/tmp` itself.
+  The Molecule container's `/run` and `/tmp` are no longer `noexec`; Molecule does
+  not reproduce STIG `/tmp` partitioning. The CI podman pre-flight now mirrors this
+  config and fails if systemd does not reach `running` or `degraded`.
+- Pinned `containers.podman` 1.21.1 in `molecule/default/requirements.yml`, and
+  pointed the Molecule galaxy dependency at that scenario file via
+  `${MOLECULE_SCENARIO_DIRECTORY}`. The bare `requirements.yml` resolved against
+  the working directory, so standalone `molecule test` runs installed the root
+  file's `>=` ranges instead of the scenario's exact pins.
+
 ## [0.4.1] - 2026-08-23
 
 ### Fixed
