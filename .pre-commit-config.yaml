@@ -27,7 +27,7 @@ repos:
         args: []
         language_version: python3.12
         additional_dependencies:
-          - ansible-core==2.21.0
+          - ansible-core==2.21.5
 
   # General file hygiene
   - repo: https://github.com/pre-commit/pre-commit-hooks
