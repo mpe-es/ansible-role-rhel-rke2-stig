@@ -157,14 +157,14 @@ jobs:
       - name: Test Podman container creation
         run: |
           # Pull and test Rocky Linux 9 (same image Molecule uses below)
-          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:2c4ca0ad75e67d018cdd0149d8c8f9c9e331ff09dde141e5bee491f9f53dc7a1
+          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:1339a167e57330c1b6b9afb7bdcf5059e9ffdeb3b3d49bbcb4f6eaf39d8ed7c4
           # Mirrors the molecule/default platform config
           trap 'timeout -k 5 30 podman rm -f test-systemd >/dev/null 2>&1 || true' EXIT
           podman run --rm -d --name test-systemd \
             --privileged \
             --systemd=always \
             --cap-add SYS_ADMIN --cap-add AUDIT_WRITE --cap-add AUDIT_CONTROL \
-            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:2c4ca0ad75e67d018cdd0149d8c8f9c9e331ff09dde141e5bee491f9f53dc7a1 /usr/sbin/init
+            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:1339a167e57330c1b6b9afb7bdcf5059e9ffdeb3b3d49bbcb4f6eaf39d8ed7c4 /usr/sbin/init
           state=""
           for _ in $(seq 30); do
             state=$(timeout -k 5 10 podman exec test-systemd systemctl is-system-running 2>/dev/null || true)
