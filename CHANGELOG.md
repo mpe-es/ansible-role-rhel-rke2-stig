@@ -22,6 +22,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the working directory, so standalone `molecule test` runs installed the root
   file's `>=` ranges instead of the scenario's exact pins.
 
+### Dependencies
+
+- Bump the Molecule image `quay.io/rockylinux/rockylinux:9-ubi-init` digest from
+  `2c4ca0a` to `1339a16`. quay.io no longer serves the `2c4ca0a` manifest, so every
+  Molecule run on `main` failed at image pull. (#101)
+- Bump ansible-lint from 26.9.0 to 26.10.1 (#105)
+- Bump pre-commit from 4.6.2 to 4.7.0 (#104)
+- Bump molecule from 26.9.0 to 26.10.0 (#102)
+- Bump molecule-plugins[podman] from 26.9.28 to 26.10.12 (#103)
+- Bump the codeql-action group (init, analyze, upload-sarif) to `24c5418` (#106)
+- Bump reviewdog/action-actionlint from 1.78.1 to 1.80.2 (#107)
+- Regenerating the lock with pip-tools 7.6.1 drops the duplicated `cryptography`
+  hash lines; the hash set is unchanged.
+
 ## [0.4.1] - 2026-08-23
 
 ### Fixed

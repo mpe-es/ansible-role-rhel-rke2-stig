@@ -63,7 +63,7 @@ jobs:
         # contents: read); without nofilter, the local reporter needs a diff and
         # fails with "diff command is empty". fail_level: any fails on any
         # finding, including the shellcheck SC* info/style codes.
-        uses: reviewdog/action-actionlint@13465d022aa41c282f730be17574b5ce692d0186 # v1.78.1
+        uses: reviewdog/action-actionlint@3cbf14efd750961dba35fccbf00f9e14028cb1f5 # v1.80.2
         with:
           reporter: local
           filter_mode: nofilter
@@ -157,14 +157,14 @@ jobs:
       - name: Test Podman container creation
         run: |
           # Pull and test Rocky Linux 9 (same image Molecule uses below)
-          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:2c4ca0ad75e67d018cdd0149d8c8f9c9e331ff09dde141e5bee491f9f53dc7a1
+          podman pull quay.io/rockylinux/rockylinux:9-ubi-init@sha256:1339a167e57330c1b6b9afb7bdcf5059e9ffdeb3b3d49bbcb4f6eaf39d8ed7c4
           # Mirrors the molecule/default platform config
           trap 'timeout -k 5 30 podman rm -f test-systemd >/dev/null 2>&1 || true' EXIT
           podman run --rm -d --name test-systemd \
             --privileged \
             --systemd=always \
             --cap-add SYS_ADMIN --cap-add AUDIT_WRITE --cap-add AUDIT_CONTROL \
-            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:2c4ca0ad75e67d018cdd0149d8c8f9c9e331ff09dde141e5bee491f9f53dc7a1 /usr/sbin/init
+            quay.io/rockylinux/rockylinux:9-ubi-init@sha256:1339a167e57330c1b6b9afb7bdcf5059e9ffdeb3b3d49bbcb4f6eaf39d8ed7c4 /usr/sbin/init
           state=""
           for _ in $(seq 30); do
             state=$(timeout -k 5 10 podman exec test-systemd systemctl is-system-running 2>/dev/null || true)
@@ -207,7 +207,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
