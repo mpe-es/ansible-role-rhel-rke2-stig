@@ -8,8 +8,10 @@
 #
 # To regenerate the lock after changing a pin here:
 #   pip-compile --generate-hashes --output-file=requirements.txt requirements.in
-# Dependabot also regenerates this lock automatically when it bumps a pin
-# (see .github/dependabot.yml).
+# Dependabot also regenerates this lock automatically for the pins it manages
+# (see .github/dependabot.yml). ansible-core is deliberately excluded: update
+# its pin, this lock, and the coupled pre-commit hook in one maintainer PR.
+# Use that same coordinated path for ansible-core security releases.
 
 # Core Ansible
 ansible-core==2.21.5

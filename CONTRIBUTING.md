@@ -48,8 +48,11 @@ python --version    # Should show Python 3.12.x
 All Python dependencies are hash-pinned in `requirements.txt`, which is generated
 from `requirements.in` via `pip-compile --generate-hashes` (pip-tools) for
 reproducible, integrity-verified installs across local development and CI/CD. Edit
-`requirements.in` (not `requirements.txt`) and recompile to change a dependency;
-Dependabot maintains the lock automatically.
+`requirements.in` (not `requirements.txt`) and recompile to change a dependency.
+Dependabot maintains the lock automatically for dependencies it manages.
+`ansible-core` is deliberately excluded because its pin, generated lock, and
+pre-commit hook must move together; maintainers update it through a coordinated
+PR, including for security releases.
 Choose **one** of the following installation methods:
 
 ##### Option A: System-wide Installation (Simpler)
