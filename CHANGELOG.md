@@ -22,6 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the working directory, so standalone `molecule test` runs installed the root
   file's `>=` ranges instead of the scenario's exact pins.
 
+### Security
+
+- Bump virtualenv from 21.7.13 to 21.14.9, with distlib 0.4.1 to 0.4.4 and
+  packaging 26.2 to 26.3. virtualenv reaches the lock through pre-commit. Fixes
+  GHSA-8rjx-v5ww-45pp, GHSA-c947-3pg5-gm8q, GHSA-5vjq-rrrf-7h2q,
+  GHSA-vxj4-q4g9-crj7 and GHSA-c978-59m8-c77v (high), and GHSA-43mp-35q3-x3fq
+  and GHSA-cw65-gx24-rc82 (medium). (#110)
+
 ### Dependencies
 
 - Bump ansible-core from 2.21.4 to 2.21.5 and align the pre-commit hook's
@@ -37,6 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump molecule-plugins[podman] from 26.9.28 to 26.10.12 (#103)
 - Bump the codeql-action group (init, analyze, upload-sarif) to `24c5418` (#106)
 - Bump reviewdog/action-actionlint from 1.78.1 to 1.80.2 (#107)
+- Bump the codeql-action group (init, analyze, upload-sarif) to v4.39.0
+  (`6f2ac81`) (#113)
+- Bump reviewdog/action-actionlint from 1.80.2 to 1.80.3 (#114)
 - Regenerating the lock with pip-tools 7.6.1 drops the duplicated `cryptography`
   hash lines; the hash set is unchanged.
 
