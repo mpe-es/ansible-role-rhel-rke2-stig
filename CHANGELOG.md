@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Dependencies
 
+- Bump ansible-core from 2.21.4 to 2.21.5 and align the pre-commit hook's
+  ansible-core from 2.21.0 to 2.21.5. ansible-core is now excluded from
+  Dependabot and updated through coordinated maintainer PRs, including security
+  releases. (#100)
 - Bump the Molecule image `quay.io/rockylinux/rockylinux:9-ubi-init` digest from
   `2c4ca0a` to `1339a16`. quay.io no longer serves the `2c4ca0a` manifest, so every
   Molecule run on `main` failed at image pull. (#101)

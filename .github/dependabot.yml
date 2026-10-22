@@ -46,6 +46,11 @@ updates:
   # --require-hashes lock generated from it.
   - package-ecosystem: "pip"
     directory: "/"
+    # ansible-core is coupled to the lock, pre-commit hook, and supported
+    # Python/tooling matrix; update it only in a coordinated maintainer PR,
+    # including security releases.
+    ignore:
+      - dependency-name: "ansible-core"
     schedule:
       interval: "weekly"
       day: "monday"
