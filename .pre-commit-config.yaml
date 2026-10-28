@@ -35,6 +35,8 @@ repos:
     hooks:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+        # .gitignore's macOS Icon rule needs its two trailing CRs
+        exclude: ^\.gitignore$
       - id: end-of-file-fixer
       - id: check-yaml
         args: [--unsafe]
