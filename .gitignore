@@ -1,3 +1,10 @@
+###############################################################################
+# Filename: .gitignore
+# Summary: OS, editor, Ansible, Python and secret-material exclusions for
+#          ansible-role-rhel-rke2-stig.
+# Classification: UNCLASSIFIED
+###############################################################################
+
 # Recommended macOS gitignore Includes:
 # Source: https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
 
@@ -7,7 +14,7 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
 
 # Thumbnails
 ._*
@@ -28,6 +35,61 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Recommended Linux gitignore Includes:
+# Source: https://github.com/github/gitignore/blob/main/Global/Linux.gitignore
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Recommended VS Code gitignore Includes:
+# Source: https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/
+*.vsix
+
+# Ansible
+*.retry
+**/.ansible
+
+# Recommended Python gitignore Includes:
+# Source: https://github.com/github/gitignore/blob/main/Python.gitignore
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+
+# Secrets and key material
+# Vault token files, as a backstop
+**/.vault-token
+
+# TLS private keys, requests and bundles; PEM is ignored because it can hold
+# a private key
+**/*.key
+**/*.pem
+**/*.csr
+**/*.p12
+**/*.pfx
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# AI assistant local settings
+**/.claude
+**/.codex
+**/.gemini
+**/.opencode
+
+# ansible-role-rhel-rke2-stig additions
 # Ackerman addition
 log/
 
@@ -44,16 +106,6 @@ log/
 crash.log
 crash.*.log
 
-# Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version
-# control as they are data points which are potentially sensitive and subject
-# to change depending on the environment.
-#
-# THIS IS A POLICY CHOICE--SENSITIVE INFORMATION WILL BE KEPT IN ANSIBLE VARS / VAULT
-#
-# *.tfvars
-# *.tfvars.json
-
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
 override.tf
@@ -64,9 +116,6 @@ override.tf.json
 # Include override files you do wish to add to version control using negated pattern
 # !example_override.tf
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
-# example: *tfplan*
-
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
@@ -75,9 +124,6 @@ terraform.rc
 # Source: https://github.com/github/gitignore/blob/main/Packer.gitignore
 # Cache objects
 packer_cache/
-
-# Crash log
-crash.log
 
 # https://www.packer.io/guides/hcl/variables
 # Exclude all .pkrvars.hcl files, which are likely to contain sensitive data,
@@ -95,7 +141,6 @@ crash.log
 sensitive.txt
 
 # Claude AI Local Settings
-.claude
 CLAUDE.md
 
 # Screenshots aren't necessary to share
@@ -105,17 +150,3 @@ CLAUDE.md
 # Reference STIG files
 stigs/
 docs/
-
-# Ansible-lint local cache
-.ansible/
-
-# Python virtual environments (local dev / CI-parity reproduction)
-.venv/
-venv/
-
-# Python bytecode. The role ships files/audit-ssg-delegate.py as SOURCE - it is copied to
-# the target and run with `python3 <file>`, never imported - so the compiled artifact is
-# never consumed, is interpreter/version-specific, and must not ship in the role package.
-# It appears locally whenever the helper is imported for testing.
-__pycache__/
-*.py[cod]
