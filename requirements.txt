@@ -358,9 +358,9 @@ molecule==26.10.0 \
     # via
     #   -r requirements.in
     #   molecule-plugins
-molecule-plugins[podman]==26.10.12 \
-    --hash=sha256:03f79df9f7d6d6107ad9507f6c58724bbd18c21afb6f020fc532361b343ea333 \
-    --hash=sha256:a618b60016eac397d8e279eeb5c494a9cee6d33103dbe5222891df81657759f1
+molecule-plugins[podman]==26.11.0 \
+    --hash=sha256:194be2c43d950545cc699ab19f1a55b26853809e6e8c855ea1a42edacf5c7ee7 \
+    --hash=sha256:513808288b7027c465b124e66a2a31002c7c907b2fea9002f63ee90bb2d0ef84
     # via -r requirements.in
 mypy-extensions==1.1.0 \
     --hash=sha256:1be4cccdb0f2482337c4743e60421de3a356cd97508abadd57d47403e94f5505 \
