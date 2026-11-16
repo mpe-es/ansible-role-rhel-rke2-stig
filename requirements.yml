@@ -3,11 +3,11 @@
 # Filename: requirements.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Ansible Galaxy collection dependencies for this role
-# Last Updated: 24 Jan 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 collections:
   - name: ansible.posix
-    version: ">=1.5.0"
+    version: "2.2.2"
   - name: community.general
-    version: ">=8.0.0"
+    version: "14.0.1"

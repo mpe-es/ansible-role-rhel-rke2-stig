@@ -1,31 +1,35 @@
 // ###########################################################################
 // Filename: .github/renovate.json5
 // Role: ansible-role-rhel-rke2-stig
-// Summary: Renovate configuration, container digest-pin maintenance ONLY
-// Last Updated: 13 Jul 2026
+// Summary: Renovate configuration: container digest pins and Galaxy
+//          collection pins ONLY
+// Last Updated: 16 Nov 2026
 // Classification: UNCLASSIFIED
 // ###########################################################################
 //
 // Purpose
 // -------
 // Dependabot owns pip and github-actions in this repo (see dependabot.yml).
-// Renovate is scoped to the ONE thing Dependabot structurally cannot track:
-// the Rocky Linux base-image digest pins that live in a bare `podman pull`
-// shell line and a Molecule platform image. Neither is a Dockerfile, so
-// Dependabot's docker ecosystem never sees them. When Rocky re-pushes the
-// `9-ubi-init` tag and garbage-collects the old digest, the pinned digest
-// goes stale and CI breaks (the exact failure this config prevents).
+// Renovate is scoped to the two things Dependabot structurally cannot track:
 //
-// `enabledManagers` restricts Renovate to the custom regex manager below and
-// nothing else, so Renovate and Dependabot never open competing PRs for the
-// same dependency.
+// 1. The Rocky Linux base-image digest pins that live in a bare `podman pull`
+//    shell line and a Molecule platform image. Neither is a Dockerfile, so
+//    Dependabot's docker ecosystem never sees them. When Rocky re-pushes the
+//    `9-ubi-init` tag and garbage-collects the old digest, the pinned digest
+//    goes stale and CI breaks (the exact failure this config prevents).
+// 2. The exact Ansible Galaxy collection pins in requirements.yml and
+//    molecule/default/requirements.yml. Dependabot has no Galaxy ecosystem.
+//
+// `enabledManagers` restricts Renovate to those two managers, so Renovate and
+// Dependabot never open competing PRs for the same dependency.
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:recommended"],
 
-  // Scope Renovate to the container-pin custom manager only. pip and
-  // github-actions remain Dependabot's responsibility.
-  enabledManagers: ["custom.regex"],
+  // Scope Renovate to the container-pin custom manager and Galaxy collection
+  // pins (any requirements.yml or galaxy.yml; Dependabot has no Galaxy
+  // ecosystem). pip and github-actions remain Dependabot's.
+  enabledManagers: ["custom.regex", "ansible-galaxy"],
 
   // Semantic commits to match the repo's conventional-commit history.
   semanticCommits: "enabled",
@@ -34,8 +38,8 @@
   // No minimumReleaseAge (cooldown) on the base image: it is a single curated
   // vendor artifact (Rocky UBI-init), digest-pinned and CVE-scanned by Trivy
   // at PR time, so prompt uptake of a re-pushed/patched digest is preferred
-  // over a supply-chain detection window. (Contrast: pip/github-actions DO
-  // get a Dependabot cooldown, a broader and less-curated dependency surface.)
+  // over a supply-chain detection window. (Contrast: pip, github-actions, and
+  // Galaxy collections DO get a cooldown, a broader and less-curated surface.)
   customManagers: [
     {
       customType: "regex",
@@ -53,19 +57,31 @@
     },
   ],
 
-  // Digest-only maintenance for the Rocky base image: keep the `9-ubi-init`
-  // tag pinned to the RHEL 9 line (the `rhel9-stig` Molecule platform tests
-  // Rocky 9 by design) and refresh only its digest. Disabling major/minor/
-  // patch update types leaves the `digest` and `pin` update types enabled, so
-  // Renovate never proposes an OS bump (e.g. the unwanted 9 -> 10 tag bump in
-  // PR #38). A Rocky 10 test, if ever wanted, belongs in its own Molecule
-  // platform rather than mutating this one.
   packageRules: [
     {
+      // Digest-only maintenance for the Rocky base image: keep the `9-ubi-init`
+      // tag pinned to the RHEL 9 line (the `rhel9-stig` Molecule platform tests
+      // Rocky 9 by design) and refresh only its digest. Disabling major/minor/
+      // patch update types leaves the `digest` and `pin` update types enabled,
+      // so Renovate never proposes an OS bump (e.g. the unwanted 9 -> 10 tag
+      // bump in PR #38). A Rocky 10 test, if ever wanted, belongs in its own
+      // Molecule platform rather than mutating this one.
       matchDatasources: ["docker"],
       matchPackageNames: ["quay.io/rockylinux/rockylinux"],
       matchUpdateTypes: ["major", "minor", "patch"],
       enabled: false,
+    },
+    {
+      // Same release-age floor as Dependabot's pip cooldown (5 / 10 days).
+      matchManagers: ["ansible-galaxy"],
+      minimumReleaseAge: "5 days",
+      commitMessagePrefix: "deps:",
+      labels: ["dependencies", "ansible"],
+    },
+    {
+      matchManagers: ["ansible-galaxy"],
+      matchUpdateTypes: ["major"],
+      minimumReleaseAge: "10 days",
     },
   ],
 }
