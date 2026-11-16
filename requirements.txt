@@ -352,9 +352,9 @@ mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
     # via markdown-it-py
-molecule==26.10.0 \
-    --hash=sha256:32533aaba78c29eed80bcaab5d03ff63fe48b8f43071cf77953f391e0732d439 \
-    --hash=sha256:deb351b11f1b329ae3b3c856d5b1c1d9a9d8f8d40ba717c77e54b1778b4557d2
+molecule==26.11.0 \
+    --hash=sha256:5e48f66e97ce03ba1e9cfdf4a3667db499e960543c91bb62f530c6cd6337dd9b \
+    --hash=sha256:706bb3d9a34e1531cfe1cda294974aad4ccba70af3ecb2d434266e0df73b0c09
     # via
     #   -r requirements.in
     #   molecule-plugins
