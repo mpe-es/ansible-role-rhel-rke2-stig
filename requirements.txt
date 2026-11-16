@@ -10,17 +10,17 @@ ansible-compat==26.3.0 \
     # via
     #   ansible-lint
     #   molecule
-ansible-core==2.21.5 \
-    --hash=sha256:08886f9f3e23d129aa98a01271c4a47833516e1cb7c737a246788cb474f41222 \
-    --hash=sha256:65bb3148c58ebb843cd5074004c805f404f152114d98476dd823324616c9c6cb
+ansible-core==2.21.6 \
+    --hash=sha256:3fa05b4b1af69f2fa19b49dde8edd5a23e693c2c1c3bda2d85fce73bd6cfc36d \
+    --hash=sha256:c1fc3cbe821176ba4227b1cae8c748e1d28d42dde605e807d23c58f71b6d1a74
     # via
     #   -r requirements.in
     #   ansible-compat
     #   ansible-lint
     #   molecule
-ansible-lint==26.10.1 \
-    --hash=sha256:a746c6f3cb5719d1c202bc14e956ef3b0eca704025d1aa92707a27fc73ed73ea \
-    --hash=sha256:cc26d405ee38c3390e80ec18c4137b5685c36d03ce7d4d8233b0470d9a0e21e9
+ansible-lint==26.11.0 \
+    --hash=sha256:74813203aa5450d720c3d86b9d0d4ddc51d30e36ac69e1f0d9f7650f5a3b5dd3 \
+    --hash=sha256:b778ea87fa873384b373e8c3fe53a06b3acc7b72ac283e2d2070f76fdf9f8358
     # via -r requirements.in
 attrs==26.1.0 \
     --hash=sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309 \
@@ -352,9 +352,9 @@ mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
     # via markdown-it-py
-molecule==26.10.0 \
-    --hash=sha256:32533aaba78c29eed80bcaab5d03ff63fe48b8f43071cf77953f391e0732d439 \
-    --hash=sha256:deb351b11f1b329ae3b3c856d5b1c1d9a9d8f8d40ba717c77e54b1778b4557d2
+molecule==26.11.0 \
+    --hash=sha256:5e48f66e97ce03ba1e9cfdf4a3667db499e960543c91bb62f530c6cd6337dd9b \
+    --hash=sha256:706bb3d9a34e1531cfe1cda294974aad4ccba70af3ecb2d434266e0df73b0c09
     # via
     #   -r requirements.in
     #   molecule-plugins
@@ -401,9 +401,9 @@ pre-commit==4.7.0 \
     --hash=sha256:1f3deee12b914c8fa184bd2b5953391c2e4f36763e403d4a23dc9983fa7c6e86 \
     --hash=sha256:2e229038ad3656081b70c27913157e4b636ef306f643f024a8a8e3f0f7b2f877
     # via -r requirements.in
-pre-commit-hooks==5.0.0 \
-    --hash=sha256:10626959a9eaf602fbfc22bc61b6e75801436f82326bfcee82bb1f2fc4bc646e \
-    --hash=sha256:8d71cfb582c5c314a5498d94e0104b6567a8b93fb35903ea845c491f4e290a7a
+pre-commit-hooks==6.0.0 \
+    --hash=sha256:76161b76d321d2f8ee2a8e0b84c30ee8443e01376121fd1c90851e33e3bd7ee2 \
+    --hash=sha256:76d8370c006f5026cdd638a397a678d26dda735a3c88137e05885a020f824034
     # via -r requirements.in
 pycparser==3.0 \
     --hash=sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29 \
