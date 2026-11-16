@@ -31,7 +31,7 @@
 ## Checklist
 
 - [ ] Commits follow Conventional Commits (`feat:`, `fix:`, `docs:`, `ci:`, ...)
-- [ ] `yamllint` and `ansible-lint` pass locally
+- [ ] `pre-commit run --all-files` passes locally (includes yamllint and ansible-lint)
 - [ ] `molecule test` passes for affected scenarios
 - [ ] Playbook `--syntax-check` passes
 - [ ] Documentation (README / CONTRIBUTING / defaults) updated as needed

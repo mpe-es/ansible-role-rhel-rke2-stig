@@ -3,7 +3,7 @@
 # Filename: .github/dependabot.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Dependabot configuration for automated dependency updates
-# Last Updated: 08 Oct 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 version: 2
@@ -46,11 +46,6 @@ updates:
   # --require-hashes lock generated from it.
   - package-ecosystem: "pip"
     directory: "/"
-    # ansible-core is coupled to the lock, pre-commit hook, and supported
-    # Python/tooling matrix; update it only in a coordinated maintainer PR,
-    # including security releases.
-    ignore:
-      - dependency-name: "ansible-core"
     schedule:
       interval: "weekly"
       day: "monday"

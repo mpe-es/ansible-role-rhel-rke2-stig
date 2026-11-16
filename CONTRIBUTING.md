@@ -49,10 +49,7 @@ All Python dependencies are hash-pinned in `requirements.txt`, which is generate
 from `requirements.in` via `pip-compile --generate-hashes` (pip-tools) for
 reproducible, integrity-verified installs across local development and CI/CD. Edit
 `requirements.in` (not `requirements.txt`) and recompile to change a dependency.
-Dependabot maintains the lock automatically for dependencies it manages.
-`ansible-core` is deliberately excluded because its pin, generated lock, and
-pre-commit hook must move together; maintainers update it through a coordinated
-PR, including for security releases.
+Dependabot maintains the lock automatically.
 Choose **one** of the following installation methods:
 
 ##### Option A: System-wide Installation (Simpler)
@@ -64,7 +61,10 @@ Install tools directly using the `python` (3.12) command:
 python -m pip install --upgrade pip
 
 # Install all dev dependencies from requirements.txt
-python -m pip install -r requirements.txt
+python -m pip install --require-hashes -r requirements.txt
+
+# Install the Ansible collections the role and its lint run need
+ansible-galaxy collection install -r requirements.yml
 ```
 
 ##### Option B: Virtual Environment (Isolated)
@@ -85,7 +85,10 @@ source ~/.venv/ansible-dev/bin/activate
 
 # Install dependencies inside the venv
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt
+
+# Install the Ansible collections the role and its lint run need
+ansible-galaxy collection install -r requirements.yml
 
 # Deactivate when done
 deactivate
@@ -111,8 +114,8 @@ molecule --version
 This repository uses pre-commit hooks to ensure code quality before commits:
 
 ```bash
-# Install hooks (one-time setup)
-pre-commit install
+# Install hooks with the requirements.txt toolchain (see below)
+python -m pre_commit install
 
 # Run manually on all files
 pre-commit run --all-files
@@ -126,9 +129,80 @@ The following hooks are configured:
 - **trailing-whitespace** - Remove trailing whitespace
 - **end-of-file-fixer** - Ensure files end with newline
 - **check-yaml** - Validate YAML syntax
-- **check-added-large-files** - Prevent large files (>500KB)
-- **check-merge-conflict** - Detect merge conflict markers
+- **check-added-large-files** - Reject any file over 500 KB, new or
+  existing (`--enforce-all`)
+- **check-merge-conflict** - Reject conflict markers in any file, even
+  outside a merge (`--assume-in-merge`; it matches the standard Git marker
+  lines, so a Markdown heading underlined with exactly `=======` is also
+  rejected)
 - **detect-private-key** - Prevent accidental key commits
+
+The CI lint job runs these hooks with `pre-commit run --all-files`, plus
+actionlint on the workflows. At commit time ansible-lint scans the whole
+project, but the other hooks check only the files the commit stages, so run
+`pre-commit run --all-files` before pushing to match the lint job.
+
+#### Every hook uses your installed toolchain
+
+Every hook is a `repo: local` hook. pre-commit does not build an environment or
+download anything for them (ansible-lint runs `offline` and uses the collections
+installed from `requirements.yml`); each runs the matching command (`yamllint`,
+`ansible-lint`, `trailing-whitespace-fixer`, and the other `pre-commit-hooks`
+commands) that is first on your `PATH`. Those are the versions you installed
+from the hash-pinned `requirements.txt`, which are the same versions CI runs, so
+a rule that fails in CI also fails your commit for the files it stages, and
+there is no second copy of any version in `.pre-commit-config.yaml` to keep in
+sync. For Python tooling, Dependabot updates `requirements.in` and
+`requirements.txt` only. The ansible-lint hook runs on every commit, including
+commits that only change the lock.
+
+This means:
+
+- **Install the dependencies before running pre-commit.** Use Option A or Option
+  B above, including the `ansible-galaxy collection install` step. With a venv,
+  activate it before `git commit`. Commits made from an IDE or GUI Git client
+  use that tool's environment, which may not include the venv.
+- **Run `pre-commit install` with the locked pre-commit.** The config requires
+  pre-commit 4.5.0 or later. `pre-commit install` records the Python
+  interpreter that ran it, and every later `git commit` uses that interpreter's
+  pre-commit, even with the venv active. Run `python -m pre_commit install`
+  (with the venv active, for Option B) so the locked pre-commit is recorded.
+  If you installed the hooks earlier with a distro or pipx pre-commit, run it
+  again.
+- **Reinstall after the lock changes.** When you pull a change to
+  `requirements.txt`, such as a merged Dependabot update, rerun:
+
+  ```bash
+  python -m pip install --require-hashes -r requirements.txt
+  ```
+
+  When `requirements.yml` changes, also rerun
+  `ansible-galaxy collection install -r requirements.yml`. Until you do, the
+  hooks run the previous versions and can disagree with CI.
+- **Check the versions match.** `ansible-lint --version` reports the
+  ansible-lint and ansible-core versions in use, `yamllint --version` the
+  yamllint version, and `python -m pip show pre-commit-hooks` the hygiene
+  hooks' version. They should equal the pins in `requirements.txt`.
+- **When `pre-commit-hooks` is bumped,** the local hook definitions in
+  `.pre-commit-config.yaml` are a copy of upstream's `.pre-commit-hooks.yaml`
+  for the pinned version. Compare them with the new version's file in the same
+  pull request and carry over any changed `entry`, `types`, or `stages`.
+
+Troubleshooting:
+
+- ``Executable `<command>` not found``: the dependencies are not installed or
+  the venv is not active.
+- ansible-lint warnings about `resolved_fqcn`: the `requirements.yml`
+  collections are not installed. Run the `ansible-galaxy collection install`
+  step above.
+- `pre-commit version 4.5.0 is required but version X is installed`: the git
+  hook was installed by an older pre-commit. Rerun `pre-commit install` as
+  described above.
+- A traceback, or results that differ from CI: another copy of the tool
+  earlier on your `PATH` (for example a pipx or distro copy) is being used.
+  Check that `command -v ansible-lint` (or the failing command) points into
+  your venv or Option A install, and that the version check above matches
+  `requirements.txt`.
 
 ### Molecule Testing
 
@@ -168,8 +242,7 @@ molecule destroy    # Clean up
    - Include STIG comment blocks for all tasks
 4. **Test your changes**:
    ```bash
-   yamllint .
-   ansible-lint
+   pre-commit run --all-files
    molecule test
    ```
 5. **Commit** with a descriptive message:

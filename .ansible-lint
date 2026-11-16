@@ -3,7 +3,7 @@
 # Filename: .ansible-lint
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Ansible linting configuration for CI/CD pipeline
-# Last Updated: 23 Jan 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 
@@ -35,8 +35,9 @@ exclude_paths:
   - stigs/
   - molecule/
 
-# Offline mode (don't download Galaxy dependencies during lint)
-offline: false
+# Offline mode (don't download Galaxy dependencies during lint); collections
+# come from requirements.yml via ansible-galaxy, installed before linting.
+offline: true
 
 # Use progressive mode for gradual adoption
 progressive: false

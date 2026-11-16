@@ -21,6 +21,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `${MOLECULE_SCENARIO_DIRECTORY}`. The bare `requirements.yml` resolved against
   the working directory, so standalone `molecule test` runs installed the root
   file's `>=` ranges instead of the scenario's exact pins.
+- Every pre-commit hook now runs from the hash-pinned lock. yamllint,
+  ansible-lint, and the `pre-commit-hooks` hygiene hooks are `repo: local`,
+  `language: unsupported` hooks, and `pre-commit-hooks==5.0.0` is pinned in
+  `requirements.in`. The hooks previously pinned their own versions, which
+  Dependabot does not update: the ansible-lint hook ran v26.4.0 and the
+  yamllint hook v1.35.1 while the lock (and CI) ran 26.10.1 and 1.38.0, so
+  lint-rule changes surfaced only in CI. The config requires pre-commit 4.5.0
+  or later (`minimum_pre_commit_version`).
+- `check-added-large-files` runs with `--enforce-all` and
+  `check-merge-conflict` with `--assume-in-merge`. Without them both hooks
+  only inspect staged additions and in-progress merges, so they passed every
+  file in CI. They now reject any file over 500 KB and any committed conflict
+  marker (staged files at commit time, every file in CI).
+- The CI lint job runs `pre-commit run --all-files` in place of separate
+  yamllint and ansible-lint steps, so local and CI lint share one definition
+  and CI also enforces the hygiene hooks.
+- Dependabot keeps managing ansible-core like every other locked
+  dependency; nothing pins a second copy of it. Its remaining coupling, to
+  the Python 3.12 toolchain and the Molecule Rocky 9 target, is gated by CI
+  on each Dependabot pull request.
+- `.ansible-lint` runs `offline: true`. The lint job installs the
+  `requirements.yml` collections with `ansible-galaxy` before pre-commit, so
+  ansible-lint no longer resolves and installs collections on its own at
+  lint time.
+- README and CONTRIBUTING install the toolchain from the hash-pinned lock
+  (`--require-hashes`); the README's unpinned `pip install pre-commit` and
+  `pip install molecule ... ansible-lint yamllint` instructions are replaced.
 
 ### Security
 
@@ -33,9 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Dependencies
 
 - Bump ansible-core from 2.21.4 to 2.21.5 and align the pre-commit hook's
-  ansible-core from 2.21.0 to 2.21.5. ansible-core is now excluded from
-  Dependabot and updated through coordinated maintainer PRs, including security
-  releases. (#100)
+  ansible-core from 2.21.0 to 2.21.5. (#100)
 - Bump the Molecule image `quay.io/rockylinux/rockylinux:9-ubi-init` digest from
   `2c4ca0a` to `1339a16`. quay.io no longer serves the `2c4ca0a` manifest, so every
   Molecule run on `main` failed at image pull. (#101)
