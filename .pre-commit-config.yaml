@@ -3,44 +3,72 @@
 # Filename: .pre-commit-config.yaml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Pre-commit hooks for local linting before push
-# Last Updated: 23 Jan 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
+
+# Project floor; `language: unsupported` (local hooks below) needs 4.4.0+.
+minimum_pre_commit_version: '4.5.0'
 
 repos:
-  # YAML Linting
-  - repo: https://github.com/adrienverge/yamllint
-    rev: 81e9f98ffd059efe8aa9c1b1a42e5cce61b640c6  # frozen: v1.35.1
+  # Every hook runs a tool installed from the hash-pinned requirements.txt
+  # (see CONTRIBUTING.md); nothing is downloaded by pre-commit.
+  - repo: local
     hooks:
       - id: yamllint
+        name: yamllint
+        entry: yamllint
         args: [-c, .yamllint]
+        language: unsupported
         types: [yaml]
 
-  # Ansible Linting
-  # Note: ansible-core 2.21+ requires Python 3.12+ (matches requirements.txt)
-  - repo: https://github.com/ansible/ansible-lint
-    rev: 5fac056c45595896c973fbde871f01f6cb14d74c  # frozen: v26.4.0
-    hooks:
       - id: ansible-lint
-        args: []
-        language_version: python3.12
-        additional_dependencies:
-          - ansible-core==2.21.5
+        name: ansible-lint
+        entry: ansible-lint
+        language: unsupported
+        pass_filenames: false
+        always_run: true
 
-  # General file hygiene
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b  # frozen: v5.0.0
-    hooks:
       - id: trailing-whitespace
+        name: trim trailing whitespace
+        entry: trailing-whitespace-fixer
         args: [--markdown-linebreak-ext=md]
         # .gitignore's macOS Icon rule needs its two trailing CRs
         exclude: ^\.gitignore$
+        language: unsupported
+        types: [text]
+        stages: [pre-commit, pre-push, manual]
+
       - id: end-of-file-fixer
+        name: fix end of files
+        entry: end-of-file-fixer
+        language: unsupported
+        types: [text]
+        stages: [pre-commit, pre-push, manual]
+
       - id: check-yaml
+        name: check yaml
+        entry: check-yaml
         args: [--unsafe]
+        language: unsupported
+        types: [yaml]
+
       - id: check-added-large-files
-        args: [--maxkb=500]
+        name: check for added large files
+        entry: check-added-large-files
+        args: [--maxkb=500, --enforce-all]
+        language: unsupported
+        stages: [pre-commit, pre-push, manual]
+
       - id: check-merge-conflict
+        name: check for merge conflicts
+        entry: check-merge-conflict
+        args: [--assume-in-merge]
+        language: unsupported
+        types: [text]
+
       - id: detect-private-key
+        name: detect private key
+        entry: detect-private-key
+        language: unsupported
+        types: [text]

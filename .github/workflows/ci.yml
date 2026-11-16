@@ -3,7 +3,7 @@
 # Filename: .github/workflows/ci.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Continuous Integration workflow for linting and testing
-# Last Updated: 23 Jan 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 name: CI
@@ -50,11 +50,11 @@ jobs:
         run: |
           pip install --require-hashes -r requirements.txt
 
-      - name: Run yamllint
-        run: yamllint .
+      - name: Install required Ansible collections
+        run: ansible-galaxy collection install -r requirements.yml
 
-      - name: Run ansible-lint
-        run: ansible-lint
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files --show-diff-on-failure
 
       - name: Run actionlint
         # SHA-pinned so Dependabot tracks and updates it like the other actions.

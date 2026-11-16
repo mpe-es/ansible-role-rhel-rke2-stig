@@ -1,5 +1,5 @@
 # Requirements source for CI/CD pipeline and local development
-# Last Updated: 04 Jun 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 #
 # This is the HUMAN-EDITED source of direct dependencies. The locked,
@@ -8,10 +8,8 @@
 #
 # To regenerate the lock after changing a pin here:
 #   pip-compile --generate-hashes --output-file=requirements.txt requirements.in
-# Dependabot also regenerates this lock automatically for the pins it manages
-# (see .github/dependabot.yml). ansible-core is deliberately excluded: update
-# its pin, this lock, and the coupled pre-commit hook in one maintainer PR.
-# Use that same coordinated path for ansible-core security releases.
+# Dependabot also regenerates this lock automatically when it bumps a pin
+# (see .github/dependabot.yml).
 
 # Core Ansible
 ansible-core==2.21.5
@@ -22,6 +20,7 @@ ansible-lint==26.10.1
 
 # Pre-commit hooks
 pre-commit==4.7.0
+pre-commit-hooks==5.0.0
 
 # Testing
 molecule==26.10.0

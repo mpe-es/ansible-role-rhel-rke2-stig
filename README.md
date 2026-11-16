@@ -1325,28 +1325,34 @@ ansible-playbook site.yml --tags RHEL-09-611075
 
 ### Pre-commit Hooks
 
-This repository uses pre-commit hooks to catch issues before pushing:
+This repository uses pre-commit hooks to catch issues before pushing. Every
+hook runs a tool from the hash-pinned `requirements.txt`, so install that
+first (see [CONTRIBUTING.md](CONTRIBUTING.md) for the full contract):
 
 ```bash
-# Install pre-commit
-pip install pre-commit
+# Install the hash-pinned toolchain (pre-commit and every hook's tool)
+python -m pip install --require-hashes -r requirements.txt
 
-# Install the git hooks
-pre-commit install
+# Install the Ansible collections the role and its lint run need
+ansible-galaxy collection install -r requirements.yml
 
-# (Optional) Run against all files
+# Install the git hooks with that pre-commit
+python -m pre_commit install
+
+# Run against all files (what the CI lint job runs)
 pre-commit run --all-files
 ```
 
-Once installed, yamllint and ansible-lint run automatically on every commit.
+Once installed, yamllint, ansible-lint, and the file-hygiene hooks run on
+every commit.
 
 ## Testing
 
 This role is tested using Molecule with Podman:
 
 ```bash
-# Install test dependencies
-pip install molecule molecule-plugins[podman] ansible-lint yamllint
+# Install test dependencies (hash-pinned lock)
+python -m pip install --require-hashes -r requirements.txt
 
 # Run full test suite
 molecule test
@@ -1365,7 +1371,8 @@ molecule destroy
 
 Automated testing runs on every push and pull request:
 
-- **Linting:** yamllint, ansible-lint
+- **Linting:** `pre-commit run --all-files` (yamllint, ansible-lint, file
+  hygiene hooks) and actionlint
 - **Syntax:** ansible-playbook --syntax-check
 - **Integration:** Molecule with Rocky Linux 9 container (the RHEL 10 path is
   live-validated on Rocky 10; a Rocky 10 Molecule platform is a planned follow-up)
