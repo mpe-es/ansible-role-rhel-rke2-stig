@@ -49,7 +49,10 @@ All Python dependencies are hash-pinned in `requirements.txt`, which is generate
 from `requirements.in` via `pip-compile --generate-hashes` (pip-tools) for
 reproducible, integrity-verified installs across local development and CI/CD. Edit
 `requirements.in` (not `requirements.txt`) and recompile to change a dependency.
-Dependabot maintains the lock automatically.
+Dependabot maintains the lock and the GitHub Actions automatically. Renovate
+keeps the exact Galaxy collection pins in `requirements.yml` and
+`molecule/default/requirements.yml` current, since Dependabot has no Galaxy
+ecosystem.
 Choose **one** of the following installation methods:
 
 ##### Option A: System-wide Installation (Simpler)

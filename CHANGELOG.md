@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `requirements.yml` pins collections exactly (`ansible.posix` 2.2.2,
+  `community.general` 14.0.1, the versions the old `>=` ranges resolved to),
+  and Renovate's `ansible-galaxy` manager keeps them and the Molecule
+  scenario's pins current, with a 5-day minimum release age (10 for majors)
+  matching the Dependabot cooldown. Galaxy has no Dependabot ecosystem and no
+  hash pinning, so exact versions are the strongest pin it offers. The README
+  lists the pinned versions. `molecule/default/requirements.yml` moves to the
+  same pins (`containers.podman` 1.21.2), so Molecule tests what consumers
+  install. The stated minimum is now ansible-core 2.19 (README and
+  `meta/main.yml` `min_ansible_version`), which `community.general` 14.0.1
+  requires; the previous 2.10 / Python 3.9 claim was already stale.
 - Bumped molecule to 26.9.0 and molecule-plugins[podman] to 26.9.28. Both now
   validate `platforms[].tmpfs` as a list, while `containers.podman.podman_container`
   requires a dict, so the Molecule platform drops its `tmpfs:` mounts and pins
@@ -16,11 +27,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   The Molecule container's `/run` and `/tmp` are no longer `noexec`; Molecule does
   not reproduce STIG `/tmp` partitioning. The CI podman pre-flight now mirrors this
   config and fails if systemd does not reach `running` or `degraded`.
-- Pinned `containers.podman` 1.21.1 in `molecule/default/requirements.yml`, and
-  pointed the Molecule galaxy dependency at that scenario file via
-  `${MOLECULE_SCENARIO_DIRECTORY}`. The bare `requirements.yml` resolved against
-  the working directory, so standalone `molecule test` runs installed the root
-  file's `>=` ranges instead of the scenario's exact pins.
+- Pinned `containers.podman` (now 1.21.2) in
+  `molecule/default/requirements.yml`, and pointed the Molecule galaxy
+  dependency at that scenario file via `${MOLECULE_SCENARIO_DIRECTORY}`. The
+  bare `requirements.yml` resolved against the working directory, so
+  standalone `molecule test` runs installed the root file's `>=` ranges
+  instead of the scenario's exact pins.
 - Every pre-commit hook now runs from the hash-pinned lock. yamllint,
   ansible-lint, and the `pre-commit-hooks` hygiene hooks are `repo: local`,
   `language: unsupported` hooks, and `pre-commit-hooks==5.0.0` is pinned in

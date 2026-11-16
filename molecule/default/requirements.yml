@@ -3,16 +3,16 @@
 # Filename: molecule/default/requirements.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Ansible Galaxy requirements for Molecule testing
-# Last Updated: 08 Oct 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
-# Exact-pinned for reproducible CI builds (Galaxy collections cannot be
-# SHA-pinned; exact version is the integrity ceiling). The published
-# /requirements.yml intentionally keeps >= ranges for downstream consumers.
+# Exact-pinned to the same versions as /requirements.yml so Molecule tests
+# what consumers install. Renovate updates both files together; a manual
+# change must update both.
 collections:
   - name: ansible.posix
-    version: "2.2.0"
+    version: "2.2.2"
   - name: community.general
-    version: "13.0.1"
+    version: "14.0.1"
   - name: containers.podman
-    version: "1.21.1"
+    version: "1.21.2"

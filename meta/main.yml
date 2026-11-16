@@ -3,7 +3,7 @@
 # Filename: meta/main.yml
 # Role: ansible-role-rhel-rke2-stig
 # Summary: Ansible Role metadata for RHEL RKE2 STIG compliance
-# Last Updated: 23 Jan 2026
+# Last Updated: 16 Nov 2026
 # Classification: UNCLASSIFIED
 ###############################################################################
 galaxy_info:
@@ -12,7 +12,7 @@ galaxy_info:
   author: Alex Ackerman
   description: Ansible Role to ensure RHEL systems running RKE2 are compliant with STIG guidelines.
   license: Apache-2.0
-  min_ansible_version: '2.10'
+  min_ansible_version: '2.19'
   platforms:
     - name: EL
       versions:

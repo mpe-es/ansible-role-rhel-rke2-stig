@@ -72,15 +72,18 @@ reflect the supported version policy.
 This project follows these supply chain and code security practices:
 
 - **Dependency monitoring:** Dependabot maintains the Python toolchain (pip) and
-  GitHub Actions; Renovate maintains the container base-image digest pins that
-  Dependabot cannot track.
-- **Supply-chain cooldown:** Dependabot bump PRs are held for a detection window
-  (pip patch/minor 5 days, major 10 days; GitHub Actions 5 days) so a
-  compromised or yanked upstream release ages before adoption.
+  GitHub Actions; Renovate maintains what Dependabot cannot track: the
+  container base-image digest pins and the Ansible Galaxy collection pins.
+- **Supply-chain cooldown:** dependency bump PRs are held for a detection
+  window (pip and Galaxy collections 5 days, majors 10 days; GitHub Actions
+  5 days) so a compromised or yanked upstream release ages before adoption.
+  The Rocky base-image digest is taken without a cooldown: it is a single
+  curated vendor image, Trivy-scanned at PR time.
 - **Pinned dependencies:** the Python toolchain is hash-pinned
-  (`pip-compile --generate-hashes`, installed with `--require-hashes`); GitHub
-  Actions are pinned to full commit SHAs; the Molecule test image is
-  digest-pinned.
+  (`pip-compile --generate-hashes`, installed with `--require-hashes`) and
+  every pre-commit hook runs from it; Galaxy collections are pinned to exact
+  versions (Galaxy offers no hash pinning); GitHub Actions are pinned to full
+  commit SHAs; the Molecule test image is digest-pinned.
 - **Vulnerability scanning:** Trivy scans run in CI, with results uploaded as
   SARIF to GitHub code scanning.
 - **Vulnerability alerts:** GitHub vulnerability alerts and automated security

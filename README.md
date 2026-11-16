@@ -39,22 +39,26 @@ profile was applied at install time and handles:
 
 ## Requirements
 
-- **Ansible:** 2.10 or higher
-- **Python:** 3.9 or higher on control node
+- **Ansible:** ansible-core 2.19 or higher (required by the pinned
+  `community.general` 14.0.1; CI runs 2.21)
+- **Python:** 3.11 or higher on the control node (ansible-core 2.19's floor)
 - **Target OS:** RHEL 9 or RHEL 10 (Enterprise Linux family)
 - **Privileges:** Root access required on target hosts
 - **Pre-requisite:** STIG profile applied during OS installation
 
 ### Ansible Collections
 
-This role requires the following collections (installed automatically if using
-`ansible-galaxy`):
+This role requires the following collections. `requirements.yml` pins the
+exact versions CI tests, and Renovate keeps those pins current:
 
-```yaml
-collections:
-  - ansible.posix
-  - community.general
+```bash
+ansible-galaxy collection install -r requirements.yml
 ```
+
+| Collection | Pinned version |
+|------------|----------------|
+| `ansible.posix` | 2.2.2 |
+| `community.general` | 14.0.1 |
 
 ## Role Variables
 
